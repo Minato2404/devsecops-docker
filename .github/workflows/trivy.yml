@@ -11,9 +11,8 @@ jobs:
       # 1. Ambil kode dari repository
       - name: Checkout Code
         uses: actions/checkout@v3
-        [cite_start]# [cite: 214-215]
 
-      # 2. Install Trivy (Versi Stabil)
+      # 2. Install Trivy
       - name: Install Trivy
         run: |
           sudo apt-get install wget apt-transport-https gnupg lsb-release -y
@@ -21,15 +20,11 @@ jobs:
           echo deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main | sudo tee -a /etc/apt/sources.list.d/trivy.list
           sudo apt-get update
           sudo apt-get install trivy -y
-        [cite_start]# [cite: 216-220]
 
       # 3. Build Docker Image
       - name: Build Docker Image
         run: docker build -t devsecops-scan .
-        [cite_start]# [cite: 221-222]
 
       # 4. Jalankan Scan Trivy
-      # Pipeline akan GAGAL (Exit Code 1) jika ditemukan vulnerability HIGH atau CRITICAL
       - name: Run Trivy Scan
         run: trivy image --exit-code 1 --severity HIGH,CRITICAL devsecops-scan
-        [cite_start]# [cite: 223-224]
